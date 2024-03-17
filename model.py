@@ -36,7 +36,9 @@ class SelfAttention(nn.Module):
             new_k_col = self.key(x)
             new_v_col = self.value(x)
 
-            # `[:, 1:]` ignore seq_len == 0 because it is a padding to make CoreML conversion don't crash
+            # Calculate kv_cache for the given x.
+            # To generate a model with a fixed shape, we need to add a padding in `seq` dimension to make CoreML conversion don't crash
+            # logically equals to `torch.cat([key_cache, new_k_col])` but with key_cache trim to given seq_len and have padding removed
             k = torch.cat([key_cache[:, :seq_len], new_k_col], dim=1)[:, 1:]
             v = torch.cat([value_cache[:, :seq_len], new_v_col], dim=1)[:, 1:]
 
