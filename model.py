@@ -36,6 +36,7 @@ class SelfAttention(nn.Module):
             new_k_col = self.key(x)
             new_v_col = self.value(x)
 
+            # `[:, 1:]` ignore seq_len == 0 because it is a padding to make CoreML conversion don't crash
             k = torch.cat([key_cache[:, :seq_len], new_k_col], dim=1)[:, 1:]
             v = torch.cat([value_cache[:, :seq_len], new_v_col], dim=1)[:, 1:]
 

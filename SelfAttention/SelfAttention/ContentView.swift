@@ -31,11 +31,12 @@ final class Store: ObservableObject {
             assert(abs(lhs_y.floatValue - rhs_y.floatValue) < 0.005)
         }
         
-        for seq_idx in 0 ..< self.max_seq_len {
+        for seq_idx in 0 ..< (self.max_seq_len - 1) {
             for state_idx in 0 ..< self.n_state {
-                let index: [NSNumber] = [0, seq_idx as NSNumber, state_idx as NSNumber]
-                let lhs = lhs_key_cache[index].floatValue
-                let rhs = rhs_key_cache[index].floatValue
+                let lhs = lhs_key_cache[[0, seq_idx as NSNumber, state_idx as NSNumber]].floatValue
+                
+                // `(1 + seq_idx)` to ignore the padding
+                let rhs = rhs_key_cache[[0, (1 + seq_idx) as NSNumber, state_idx as NSNumber]].floatValue
                 assert(abs(lhs - rhs) < 0.005)
             }
         }
