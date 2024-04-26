@@ -25,3 +25,9 @@ and
 Then 
 
 `value_1[:, -1]` should be equal to `value_2[:, -1]` if the last row of data is the same in the matrix multiplication on the sequence dimension in the above two cases. However, this does not hold true in CoreML.
+
+# Based on my past experience, I speculate that the possible cause of this problem is:
+
+The CoreML is not suitable for intermediate calculations. 
+
+If a computation is divided into two parts, with one part completed inside CoreML and the other part completed outside CoreML, the final result is likely to have significant errors. It is necessary to ensure that the entire calculation occurs within CoreML.
